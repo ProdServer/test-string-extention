@@ -45,14 +45,32 @@ function generateFullName(gender) {
   return `${firstName} ${surname}`;
 }
 
+// Utility: Sanitize Turkish characters for email local part
+function sanitizeEmailLocalPart(str) {
+  return str
+    .replace(/ç/g, 'c')
+    .replace(/ğ/g, 'g')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ş/g, 's')
+    .replace(/ü/g, 'u')
+    .replace(/Ç/g, 'c')
+    .replace(/Ğ/g, 'g')
+    .replace(/İ/g, 'i')
+    .replace(/Ö/g, 'o')
+    .replace(/Ş/g, 's')
+    .replace(/Ü/g, 'u');
+}
+
 function generateEmail(domainType, customDomain) {
   if (domainType === 'random') {
     return getRandomItem(DATA.emails);
   }
   
-  const name = generateFullName(Math.random() > 0.5 ? 'male' : 'female')
+  let name = generateFullName(Math.random() > 0.5 ? 'male' : 'female')
     .toLowerCase()
     .replace(' ', '.');
+  name = sanitizeEmailLocalPart(name);
   
   const domain = domainType === 'custom' ? customDomain : domainType;
   return `${name}@${domain}`;
