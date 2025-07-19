@@ -6,40 +6,29 @@ const WHITESPACE_REGEX = /\s+/g;
 
 // Core functionality
 function generateLoremIpsum(length, removeSpace, removePunct) {
-  let result = '';
-
-  // Generate initial text
-  while (result.length < length) {
-    result += LOREM_IPSUM_TEXT + ' ';
-  }
-
-  // Remove punctuation and/or spaces if requested
+  // Performance optimization: pre-calculate processed text
+  let baseText = LOREM_IPSUM_TEXT;
   if (removePunct) {
-    result = result.replace(PUNCTUATION_REGEX, '');
+    baseText = baseText.replace(PUNCTUATION_REGEX, '');
   }
   if (removeSpace) {
-    result = result.replace(WHITESPACE_REGEX, '');
+    baseText = baseText.replace(WHITESPACE_REGEX, '');
   }
-
-  // Generate more text if needed after removal
-  while (result.length < length) {
-    let additional = LOREM_IPSUM_TEXT;
-    if (removePunct) {
-      additional = additional.replace(PUNCTUATION_REGEX, '');
-    }
-    if (removeSpace) {
-      additional = additional.replace(WHITESPACE_REGEX, '');
-    }
-    result += additional;
+  
+  // Calculate how many times we need to repeat the base text
+  const repeatCount = Math.ceil(length / baseText.length);
+  let result = baseText.repeat(repeatCount);
+  
+  // Trim to exact length
+  result = result.slice(0, length);
+  
+  // If we still need more characters, pad with appropriate character
+  if (result.length < length) {
+    const paddingChar = removeSpace ? 'a' : ' ';
+    result += paddingChar.repeat(length - result.length);
   }
-
-  let checkFinal = result.slice(0, length);
-  // If the final length is still shorter than expected, pad with additional characters
-  while (checkFinal.length < length) {
-    let paddingChar = removeSpace ? 'a' : ' ';
-    checkFinal += paddingChar;
-  }
-  return checkFinal;
+  
+  return result;
 }
 
 // Expose function to be used in other files

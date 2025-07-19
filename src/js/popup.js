@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isNaN(length) || length <= 0) {
       showFeedback('Please enter a valid positive number for length', 'error');
       clearTextarea();
+    } else if (length > 999999) {
+      showFeedback('Maximum length is 999,999 characters', 'error');
+      clearTextarea();
     } else {
       document.getElementById('resultText').value = window.generateLoremIpsum(
         length,
