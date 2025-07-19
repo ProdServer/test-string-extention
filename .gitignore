@@ -164,3 +164,8 @@ dist
 
 test-string-generator.zip
 storedescriptions
+
+# Development and documentation files (keep locally, don't track in git)
+.cursorrules
+CODE_STYLE.md
+PROGRESS.md
